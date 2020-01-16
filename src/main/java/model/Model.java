@@ -21,7 +21,7 @@ public class Model implements IModel {
         this.sSimulator = sSimulator;
         this.exerciseS = exerciseS;
     }
-    //Методы работы с упражнениями
+    //Методы для работы с упражнениями
     public List<Exercise> getExercises() {
         return exerciseS.getExercises();
     }

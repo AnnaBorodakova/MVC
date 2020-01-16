@@ -1,7 +1,8 @@
 package model;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Training implements Serializable {
     private int idTraining;

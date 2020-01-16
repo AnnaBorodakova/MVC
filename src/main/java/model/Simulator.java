@@ -1,7 +1,7 @@
 package model;
 
 import java.io.Serializable;
-
+import java.util.List;
 
 public class Simulator implements Serializable {
     private String model;

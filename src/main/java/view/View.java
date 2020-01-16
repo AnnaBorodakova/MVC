@@ -3,7 +3,11 @@ package view;
 import interfaces.IController;
 import interfaces.IView;
 
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class View implements IView {
