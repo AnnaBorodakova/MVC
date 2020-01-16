@@ -1,12 +1,5 @@
 package interfaces;
 
-import model.Firm;
-import model.TypeSimulator;
-
-import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.List;
-
 public interface IController {
     void setModel(IModel model);
     void setView(IView view);
