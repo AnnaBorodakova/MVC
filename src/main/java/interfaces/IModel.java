@@ -3,8 +3,6 @@ package interfaces;
 import model.*;
 import model.services.*;
 import java.util.List;
-
-
 public interface IModel {
     boolean createFirm(String nameFirm);
     boolean deleteFirm(String nameFirm);

@@ -1,7 +1,7 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+
 
 public class TypeExercise implements Serializable {
     private String typeExersise;

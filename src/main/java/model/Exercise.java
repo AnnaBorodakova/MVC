@@ -75,5 +75,4 @@ public class Exercise implements Serializable {
         this.countApproach = countApproach;
     }
 
-
 }

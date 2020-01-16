@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 
 public class Firm implements Serializable {
+
     private String nameFirm;
 
     public Firm(String nameFirm) {
