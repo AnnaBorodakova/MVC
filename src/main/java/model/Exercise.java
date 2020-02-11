@@ -1,16 +1,19 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalTime;
+import java.util.Objects;
 
 public class Exercise implements Serializable {
     private int idExercise;
     private TypeExercise typeExercise;
     private Training training;
     private Simulator simulator;
-    private String time;
+    private LocalTime time;
     private int countApproach;
 
-    public Exercise(int idExercise, TypeExercise typeExercise, Training training, Simulator simulator, String time, int countApproach) {
+    public Exercise(int idExercise, TypeExercise typeExercise,
+                    Training training, Simulator simulator,LocalTime time, int countApproach) {
         this.idExercise = idExercise;
         this.typeExercise = typeExercise;
         this.training = training;
@@ -19,12 +22,12 @@ public class Exercise implements Serializable {
         this.countApproach = countApproach;
     }
 
-    public Exercise(int idExercise, TypeExercise typeExercise, Training training, String time, int countApproach) {
-        this.idExercise = idExercise;
-        this.typeExercise = typeExercise;
-        this.training = training;
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime time) {
         this.time = time;
-        this.countApproach = countApproach;
     }
 
     public int getIdExercise() {
@@ -59,14 +62,6 @@ public class Exercise implements Serializable {
         this.simulator = simulator;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public int getCountApproach() {
         return countApproach;
     }
@@ -75,4 +70,20 @@ public class Exercise implements Serializable {
         this.countApproach = countApproach;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Exercise)) return false;
+        Exercise exercise = (Exercise) o;
+        return getCountApproach() == exercise.getCountApproach() &&
+                getTypeExercise().equals(exercise.getTypeExercise()) &&
+                getTraining().equals(exercise.getTraining()) &&
+                getSimulator().equals(exercise.getSimulator()) &&
+                getTime().equals(exercise.getTime());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTypeExercise(), getTraining(), getSimulator(), getTime(), getCountApproach());
+    }
 }

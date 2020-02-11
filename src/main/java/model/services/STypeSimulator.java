@@ -1,18 +1,20 @@
 package model.services;
 
+import interfaces.IServices;
 import model.TypeSimulator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class STypeSimulator {
-    private List<TypeSimulator> typeSimulators;
+public class STypeSimulator<T extends TypeSimulator> implements IServices<T> {
+    private List<T> typeSimulators;
 
-    public List<TypeSimulator> getTypeSimulators() {
+    public List<T> get() {
         return typeSimulators;
     }
 
-    public void setTypeSimulators(List<TypeSimulator> typeSimulators) {
+    public void set(List<T> typeSimulators) {
         this.typeSimulators = typeSimulators;
     }
 
@@ -20,41 +22,36 @@ public class STypeSimulator {
         typeSimulators = new ArrayList<>();
     }
 
-    public boolean createTypeSimulator(String typeSimulator) {
-        TypeSimulator tSimulator = findTypeSimulator(typeSimulator);
-        if (tSimulator == null) {
-            tSimulator = new TypeSimulator(typeSimulator);
-            typeSimulators.add(tSimulator);
+    public boolean create(T object) {
+        Optional<T> ts = typeSimulators.stream().filter(x -> x.getTypeSimulator().equals(object.getTypeSimulator())).findAny();
+        if (ts.isPresent()) {
+            return false;
+        }else {
+            return typeSimulators.add(object);
         }
-        return true;
     }
 
-    public TypeSimulator findTypeSimulator(String TypeSimulator){
-        TypeSimulator typeSimulator1 = null;
-        for (TypeSimulator typeSimulator2 : typeSimulators) {
-            if (typeSimulator2.getTypeSimulator().equals(TypeSimulator)) {
-                typeSimulator1 = typeSimulator2;
-                break;
-            }
-        }
-        return typeSimulator1;
-
+    public boolean delete(T object) {
+        if (find(object.getIdTypeSimulator()) == null) {
+            return false;
+        }else {typeSimulators.remove(object);
+        return true;}
     }
 
-    public boolean updateTypeSimulator(String name, String name1){
-        TypeSimulator ts = findTypeSimulator(name);
-        TypeSimulator ts2 = findTypeSimulator(name1);
-        if(ts != null && ts2 == null){
-            ts.setTypeSimulator(name1);
+    public boolean update(T fobject, T sobject) {
+        if (fobject == null && sobject == null) {
+            return false;
+        } else {
+            fobject.setTypeSimulator(sobject.getTypeSimulator());
+            return true;
         }
-        return true;
     }
 
-    public boolean deleteTypeSimulator(String nameTS){
-        TypeSimulator typeS = findTypeSimulator(nameTS);
-        if(typeS != null){
-            typeSimulators.remove(nameTS);
+    public T find(int id) {
+        Optional<T> ts = typeSimulators.stream().filter(x -> x.getIdTypeSimulator() == id).findFirst();
+        if(ts.isPresent()){
+            return ts.get();
         }
-        return true;
+        else  return null;
     }
 }

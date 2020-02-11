@@ -1,0 +1,26 @@
+[
+  {
+    "model": "Model1",
+    "firm": {
+      "nameFirm": "Firm1",
+      "idFirm": 1
+    },
+    "typeSimulator": {
+      "typeSimulator": "Кардио",
+      "idTypeSimulator": 1
+    },
+    "idSimulator": 1
+  },
+  {
+    "model": "Model2",
+    "firm": {
+      "nameFirm": "Firm2",
+      "idFirm": 2
+    },
+    "typeSimulator": {
+      "typeSimulator": "Силовой",
+      "idTypeSimulator": 2
+    },
+    "idSimulator": 2
+  }
+]

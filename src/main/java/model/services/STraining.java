@@ -1,59 +1,59 @@
 package model.services;
 
+import interfaces.IServices;
 import model.Training;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class STraining {
-    private List<Training> trainings;
+public class STraining<T extends Training> implements IServices<T> {
+    private List<T> trainings;
 
     public STraining() {
         this.trainings = new ArrayList<>();
     }
 
-    public List<Training> getTrainings() {
+    public List<T> get() {
         return trainings;
     }
 
-    public void setTrainings(List<Training> trainings) {
+    public void set(List<T> trainings) {
         this.trainings = trainings;
     }
 
-    public boolean createTraining(int idTraining, String time, String date){
-        Training training = findTraining(idTraining);
-        if(training == null){
-            training = new Training(idTraining, time,date);
-            trainings.add(training);
+    public boolean create(T object){
+        Optional<T> training = trainings.stream().filter(x -> x.equals(object)).findAny();
+        if (training.isPresent()) {
+            return false;
+        }else {
+            return trainings.add(object);
         }
-        return true;
     }
 
-    public boolean deleteTraining(int idTraining){
-        Training training = findTraining(idTraining);
-        if(training != null){
-            trainings.remove(training);
+    public boolean delete(T object) {
+        if (find(object.getIdTraining()) == null) {
+            return false;
         }
-        return true;
+        else {trainings.remove(object); return  true;}
     }
 
-    public boolean updateTraining(int idTraining, String time, String date){
-        Training training = findTraining(idTraining);
-        if(training != null){
-            training.setTime(time);
-            training.setDate(date);
+    public boolean update(T fobject, T sobject) {
+        if (fobject == null && sobject == null) {
+            return false;
+        } else {
+            fobject.setTime(sobject.getTime());
+            fobject.setDate(sobject.getDate());
+            return true;
         }
-        return true;
     }
 
-    public Training findTraining(int idTraining)
-    {
-        Training training = null;
-        for (Training training1 : trainings){
-            if(training1.getIdTraining() == idTraining){
-                training = training1;
-            }
+    public T find(int id) {
+        Optional<T> training = trainings.stream().filter(x -> x.getIdTraining() == id).findFirst();
+        if(training.isPresent()){
+            return  training.get();
         }
-        return training;
+        else  return null;
     }
+
 }

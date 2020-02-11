@@ -1,0 +1,30 @@
+[
+  {
+    "typeExersise": "1232131",
+    "idTypeExercise": 1
+  },
+  {
+    "typeExersise": "gdfgfdg",
+    "idTypeExercise": 2
+  },
+  {
+    "typeExersise": "ghgjjgjh",
+    "idTypeExercise": 3
+  },
+  {
+    "typeExersise": "dfgji",
+    "idTypeExercise": 4
+  },
+  {
+    "typeExersise": "FFFFFFFFFFFFFFFF",
+    "idTypeExercise": 5
+  },
+  {
+    "typeExersise": "dfgji",
+    "idTypeExercise": 6
+  },
+  {
+    "typeExersise": "FFFFFFFFF",
+    "idTypeExercise": 7
+  }
+]

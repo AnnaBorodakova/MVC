@@ -2,8 +2,11 @@ package view;
 
 import interfaces.IController;
 import interfaces.IView;
+import org.apache.commons.lang3.StringUtils;
 
-
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class View implements IView {
@@ -32,28 +35,29 @@ public class View implements IView {
     private int readInteger(int min, int max, String captionMessage) {
         Scanner scanner = new Scanner(System.in);
 
-        int i;
+        int number;
         while (true) {
             System.out.println(captionMessage);
-            i = scanner.nextInt();
+            number = scanner.nextInt();
 
-            if (i > max) {
+            if (number > max) {
                 System.out.println("Ошибка. Число больше " + max);
-            } else if (i < min) {
+            } else if (number < min) {
                 System.out.println("Ошибка. Число меньше " + min);
             } else {
-                return i;
+                return number;
             }
         }
     }
 
+
     private void mainMenu() {
         System.out.println("-- Добро пожадовать в тренажёрный зал --");
         System.out.println("Основное меню:");
-        System.out.println("1 - Просмотр записей");
-        System.out.println("2 - Добавить запись");
-        System.out.println("3 - Изменить запись");
-        System.out.println("4 - Удалить запись");
+        System.out.println("1 - Добавить запись");
+        System.out.println("2 - Изменить запись");
+        System.out.println("3 - Удалить запись");
+        System.out.println("4 - Добавить к существующему списку записи из другого файла");
         System.out.println("0 - Выход");
     }
 
@@ -69,127 +73,51 @@ public class View implements IView {
         System.out.println("0 - Выход");
     }
 
-    private void createMenu(){
-        System.out.println("Что хотите добавить?");
-        System.out.println("1 - Добавить фирму");
-        System.out.println("2 - Добавить тип упражнения");
-        System.out.println("3 - Добавить тип тренажёра");
-        System.out.println("4 - Добавить тренировку");
-        System.out.println("5 - Добавить тренажёр");
-        System.out.println("6 - Добавить упражнение");
-        System.out.println("0 - Выход");
-    }
-
-    private void updateMenu() {
-        System.out.println("Выберите, что менять:");
-        System.out.println("1 - Фирму");
-        System.out.println("2 - Тип упражнения");
-        System.out.println("3 - Тип тренажёра");
-        System.out.println("4 - Тренеровку");
-        System.out.println("5 - Тренажёр");
-        System.out.println("6 - Упражнение");
-        System.out.println("0 - Выход");
-    }
-
-    private void deleteMenu() {
-        System.out.println("Выберите, что удалять:");
-        System.out.println("1 - Фирму");
-        System.out.println("2 - Тип упражнения");
-        System.out.println("3 - Тип тренажёра");
-        System.out.println("4 - Тренеровку");
-        System.out.println("5 - Тренажёр");
-        System.out.println("6 - Упражнение");
-        System.out.println("0 - Выход");
-    }
-
     private void runMainMenu() {
         while (true) {
-            mainMenu();
-            int i = readInteger(0, 4, "");
+            showMenu();
+            int i = readInteger(0, 7, "");
             if (i == 0) {
                 break;
             }
             switch (i) {
                 case 1: {
-                    showMenu();
-                    int k = readInteger(0, 7, "");
+                    controller.showAllFirm();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
                     if (k == 0) {
                         break;
                     }
                     switch (k) {
                         case 1: {
-                            controller.showAllFirm();
+                            createFirmMenu();
                             break;
                         }
-                        case 2:{
-                            controller.showAllTypeExercise();
+                        case 2: {
+                            updateFirmMenu();
                             break;
                         }
-                        case 3:{
-                            controller.showAllTypeSimulator();
+                        case 3: {
+                            deleteFirmMenu();
                             break;
                         }
                         case 4:{
-                            controller.showAllTrainings();
-                            break;
-                        }
-                        case 5:{
-                            controller.showAllSimulators();
-                            break;
-                        }
-                        case 6:{
-                            controller.showAllExercises();
-                            break;
-                        }
-                        case 7:{
-                            controller.showAll();
+                            appendFileFirm();
                             break;
                         }
                     }
                     break;
                 }
                 case 2: {
-                    createMenu();
-                    int j = readInteger(0, 6, "");
-                    if (j == 0) {
+                    controller.showAllTypeExercise();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
+                    if (k == 0) {
                         break;
                     }
-                    switch (j) {
+                    switch (k) {
                         case 1: {
-                            createFirmMenu();
-                            break;
-                        }
-                        case 2:{
                             createTypeExerciseMenu();
-                            break;
-                        }
-                        case 3:{
-                            createTypeSimulatorMenu();
-                            break;
-                        }
-                        case 4:{
-                            createTrainingMenu();
-                            break;
-                        }
-                        case 5:{
-                            createSimulatorMenu();
-                        }
-                        case 6:{
-                            createExerciseMenu();
-                            break;
-                        }
-                    }
-                    break;
-                }
-                case 3: {
-                    updateMenu();
-                    int j = readInteger(0, 6, "");
-                    if (j == 0) {
-                        break;
-                    }
-                    switch (j){
-                        case 1:{
-                            updateFirmMenu();
                             break;
                         }
                         case 2: {
@@ -197,57 +125,125 @@ public class View implements IView {
                             break;
                         }
                         case 3: {
-                            updateTypeSimulatorMenu();
+                            deleteTypeExerciseMenu();
                             break;
                         }
-                        case 4: {
-                            updateTrainingMenu();
-                            break;
-                        }
-                        case 5: {
-                            updateSimulatorMenu();
-                            break;
-                        }
-                        case 6: {
-                            updateExerciseMenu();
+                        case 4:{
+                            appendFileTypeExersice();
                             break;
                         }
                     }
                     break;
                 }
-                case 4:{
-                    deleteMenu();
-                    int j = readInteger(0, 6, "");
-                    if (j == 0) {
+                case 3: {
+                    controller.showAllTypeSimulator();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
+                    if (k == 0) {
                         break;
                     }
-                    switch (j){
-                        case 1:{
-                            deleteFirmMenu();
+                    switch (k) {
+                        case 1: {
+                            createTypeSimulatorMenu();
                             break;
                         }
-                        case 2:{
-                            deleteTypeExerciseMenu();
+                        case 2: {
+                            updateTypeSimulatorMenu();
                             break;
                         }
-                        case 3:{
+                        case 3: {
                             deleteTypeSimulatorMenu();
                             break;
                         }
                         case 4:{
-                            deleteTrainingMenu();
-                            break;
-                        }
-                        case 5: {
-                            deleteSimulatorMenu();
-                            break;
-                        }
-                        case 6:{
-                            deleteExerciseMenu();
+                            appendFileTypeSimulator();
                             break;
                         }
                     }
                     break;
+                }
+                case 4: {
+                    controller.showAllTrainings();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
+                    if (k == 0) {
+                        break;
+                    }
+                    switch (k) {
+                        case 1: {
+                            createTrainingMenu();
+                            break;
+                        }
+                        case 2: {
+                            updateTrainingMenu();
+                            break;
+                        }
+                        case 3: {
+                            deleteTrainingMenu();
+                            break;
+                        }
+                        case 4:{
+                            appendFileTraining();
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case 5: {
+                    controller.showAllSimulators();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
+                    if (k == 0) {
+                        break;
+                    }
+                    switch (k) {
+                        case 1: {
+                            createSimulatorMenu();
+                            break;
+                        }
+                        case 2: {
+                            updateSimulatorMenu();
+                            break;
+                        }
+                        case 3: {
+                            deleteSimulatorMenu();
+                            break;
+                        }
+                        case 4:{
+                            appendFileSimulator();
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case 6: {
+                    controller.showAllExercises();
+                    mainMenu();
+                    int k = readInteger(0, 4, "");
+                    if (k == 0) {
+                        break;
+                    }
+                    switch (k) {
+                        case 1: {
+                            createExerciseMenu();
+                            break;
+                        }
+                        case 2: {
+                           updateExerciseMenu();
+                            break;
+                        }
+                        case 3: {
+                            deleteExerciseMenu();
+                            break;
+                        }
+                        case 4:{
+                            appendFileExercise();
+                            break;
+                        }
+                    }
+                    break;
+                } case 7:{
+                    controller.showAll();
                 }
             }
         }
@@ -255,177 +251,217 @@ public class View implements IView {
 
     private void deleteFirmMenu() {
         System.out.println("-- Удаление фирмы --");
-        String s;
-        s = readString(0, 20, "Введите название фирмы");
-        if (s != "") {
-            controller.validDeleteFirm(s);
-        }
+        int idFirm = readInteger(1, 10, "Введите id фирмы");
+        controller.validDeleteFirm(idFirm);
     }
 
     private void updateFirmMenu() {
         System.out.println("-- Изменение фирмы --");
-        String s, s1;
-        s = readString(0, 20, "Введите название фирмы которую хотите заменить");
-        s1 = readString(0, 20, "Введите новое название фирмы");
-        if (s != "" && s1 != "") {
-            controller.validUpdateFirm(s,s1);
+        int idFirm = readInteger(1, 10, "Введите id фирмы которую хотите заменить");
+        String nameFirm = readString(0, 20, "Введите новое название фирмы");
+        if (!StringUtils.isEmpty(nameFirm)) {
+            controller.validUpdateFirm(idFirm, nameFirm);
         }
     }
 
     private void createFirmMenu() {
         System.out.println("-- Добавление фирмы --");
-        String s;
-        s = readString(0, 20, "Введите название фирмы");
-        if (s != "") {
-            controller.validCreateFirm(s);
+        String nameFirm = readString(0, 20, "Введите название фирмы");
+        if (!StringUtils.isEmpty(nameFirm)) {
+            controller.validCreateFirm(nameFirm);
         }
     }
 
     private void updateTypeExerciseMenu() {
         System.out.println("-- Изменение фирмы --");
-        String s, s1;
-        s = readString(0, 20, "Введите название типа упражнения которое хотите заменить");
-        s1 = readString(0, 20, "Введите новое название типа упражнения");
-        if (s != "" && s1 != "") {
-            controller.validUpdateTypeExercise(s,s1);
+        int idExercise = readInteger(1, 10, "Введите id типа упражнения которое хотите заменить");
+        String nameTypeExercise = readString(0, 20, "Введите новое название типа упражнения");
+        if (!StringUtils.isEmpty(nameTypeExercise)) {
+            controller.validUpdateTypeExercise(idExercise, nameTypeExercise);
+        }
+    }
+
+    private void appendFileTypeExersice(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadTypeExerciseOtherFile(nameFile);
+        }
+    }
+
+    private void appendFileFirm(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadFirmOtherFile(nameFile);
+        }
+    }
+
+    private void appendFileTypeSimulator(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadTypeSimulatorOtherFile(nameFile);
+        }
+    }
+
+    private void appendFileTraining(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadTrainingOtherFile(nameFile);
+        }
+    }
+
+    private void appendFileSimulator(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadSimulatorOtherFile(nameFile);
+        }
+    }
+
+    private void appendFileExercise(){
+        System.out.println("-- Добавление из другого файла --");
+        String nameFile = readString(0, 20, "Введите имя файла (Filename.txt)");
+        if (!StringUtils.isEmpty(nameFile)) {
+            controller.loadExerciseOtherFile(nameFile);
         }
     }
 
     private void createTypeExerciseMenu() {
         System.out.println("-- Добавление типа упражения --");
-        String s;
-        s = readString(0, 20, "Введите тип упражнения");
-        if (s != "") {
-            controller.validCreateTypeExercise(s);
+        String nameTypeExercise = readString(0, 20, "Введите тип упражнения");
+        if (!StringUtils.isEmpty(nameTypeExercise)) {
+            controller.validCreateTypeExercise(nameTypeExercise);
         }
     }
 
     private void deleteTypeExerciseMenu() {
         System.out.println("-- Добавление типа упражения --");
-        String s;
-        s = readString(0, 20, "Введите тип упражнения");
-        if (s != "") {
-            controller.validDeleteTypeExercise(s);
-        }
+        int idNameTypeExercise = readInteger(1, 10, "Введите id типа упражнения которое хотите удалить");
+        controller.validDeleteTypeExercise(idNameTypeExercise);
     }
 
     private void createTypeSimulatorMenu() {
         System.out.println("-- Добавление типа тренажёра --");
-        String s;
-        s = readString(0, 20, "Введите тип тренажёра");
-        if (s != "") {
-            controller.validCreateTypeSimulator(s);
+        String nameTypeSimulator = readString(0, 20, "Введите тип тренажёра");
+        if (!StringUtils.isEmpty(nameTypeSimulator)) {
+            controller.validCreateTypeSimulator(nameTypeSimulator);
         }
     }
 
     private void updateTypeSimulatorMenu() {
         System.out.println("-- Изменение фирмы --");
-        String s, s1;
-        s = readString(0, 20, "Введите название типа тренажёра которое хотите заменить");
-        s1 = readString(0, 20, "Введите новое название типа тренажёра");
-        if (s != "" && s1 != "") {
-            controller.validUpdateTypeSimulator(s,s1);
+        int idTypeSimulator = readInteger(1, 10, "Введите номер типа тренажёра которое хотите заменить");
+        String nameTypeSimulator = readString(0, 20, "Введите новое название типа тренажёра");
+        if (!StringUtils.isEmpty(nameTypeSimulator)) {
+            controller.validUpdateTypeSimulator(idTypeSimulator, nameTypeSimulator);
         }
     }
 
     private void deleteTypeSimulatorMenu() {
         System.out.println("-- Удаление типа тренажёра --");
-        String s;
-        s = readString(0, 20, "Введите тип тренажёра");
-        if (s != "") {
-            controller.validDeleteTypeSimulator(s);
-        }
+        int idTypeSimulator = readInteger(1, 10, "Введите номер типа тренажёра которое хотите удалить");
+        controller.validDeleteTypeSimulator(idTypeSimulator);
     }
 
     private void createTrainingMenu() {
         System.out.println("-- Добавление тренировки --");
-        String s,s1;
-        s = readString(0, 20, "Введите время начала тренировки в формате (чч:мм)");
-        s1 = readString(0, 20, "Введите дату тренировки в формате (dd.mm.yy)");
-        if (s != "" && s1!= "") {
-            controller.validCreateTraining(s, s1);
-        }
+        String timeBegining = readString(4, 8, "Введите время начала тренировки чч:мм");
+        String dateTraining = readString(6, 8, "Введите дату тренировки в формате (dd-mm-yy)");
+        if (timeBegining.matches("\\d{2}:\\d{2}") && dateTraining.matches("\\d{2}-\\d{2}-\\d{2}")
+                && !StringUtils.isEmpty(timeBegining) && !StringUtils.isEmpty(dateTraining)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime time = LocalTime.parse(timeBegining, formatter);
+            DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd-MM-yy");
+            LocalDate date = LocalDate.parse(dateTraining, formatter1);
+            controller.validCreateTraining(time, date);
+        } else System.out.println("При введении даты или времени произошла ошибка");
     }
 
     private void updateTrainingMenu() {
         System.out.println("-- Изменение тренировки --");
-        String s,s1;
-        int i = readInteger(0, 10, "Введите номер тренировки которую хотите изменить");
-        s = readString(0, 20, "Введите новое время начала тренировки в формате (чч:мм)");
-        s1 = readString(0, 20, "Введите новую дату тренировки в формате (dd.mm.yy)");
-        if (s != "" && s1!= "") {
-            controller.validUpdateTraining(i, s, s1);
-        }
+        int idTraining = readInteger(1, 10, "Введите номер тренировки которую хотите изменить");
+        String timeBegining = readString(4, 8, "Введите новое время начала тренировки чч:мм");
+        String dateTraining = readString(0, 20, "Введите новую дату тренировки в формате (dd-mm-yy)");
+        if (timeBegining.matches("\\d{2}:\\d{2}") && dateTraining.matches("\\d{2}-\\d{2}-\\d{2}")
+                && !StringUtils.isEmpty(timeBegining) && !StringUtils.isEmpty(dateTraining)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime time = LocalTime.parse(timeBegining, formatter);
+            DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd-MM-yy");
+            LocalDate date = LocalDate.parse(dateTraining, formatter1);
+            controller.validUpdateTraining(idTraining, time, date);
+        } else System.out.println("При введении даты или времени произошла ошибка");
     }
 
     private void deleteTrainingMenu() {
         System.out.println("-- Удаление тренировки --");
-        int i = readInteger(0, 10, "Введите номер тренировки, которую хотите удалить");
-        controller.validDeleteTraining(i);
+        int idTraining = readInteger(1, 10, "Введите номер тренировки, которую хотите удалить");
+        controller.validDeleteTraining(idTraining);
     }
 
     private void createSimulatorMenu() {
         System.out.println("-- Добавление тренажёра --");
-        String s,s1,s2;
-        s = readString(0, 20, "Введите название модели");
-        s1 = readString(0, 20, "Введите название фирмы");
-        s2 = readString(0, 20, "Введите тип тренажёра");
-        if (s != "" && s1!= ""&& s2!= "") {
-            controller.validCreateSimulator(s, s1, s2);
+        String nameModelSimulator = readString(0, 20, "Введите название модели");
+        int idFirm = readInteger(1, 10, "Введите номер фирмы");
+        int idTypeSimulator = readInteger(1, 10, "Введите номер типа тренажёра");
+        if (!StringUtils.isEmpty(nameModelSimulator)) {
+            controller.validCreateSimulator(nameModelSimulator, idFirm, idTypeSimulator);
         }
     }
 
     private void updateSimulatorMenu() {
         System.out.println("-- Изменение тренажёра --");
-        String s,s1,s2;
-        int i = readInteger(0, 10, "Введите номер тренажёра, который хотите удалить");
-        s = readString(0, 20, "Введите новое название модели");
-        s1 = readString(0, 20, "Введите новое название фирмы");
-        s2 = readString(0, 20, "Введите новое тип тренажёра");
-        if (s != "" && s1!= ""&& s2!= "") {
-            controller.validUpdateSimulator(i, s, s1, s2);
+        int idSimulator = readInteger(1, 10, "Введите номер тренажёра, который хотите удалить");
+        String nameModelSimulator = readString(0, 20, "Введите новое название модели");
+        int idFirm = readInteger(1, 10, "Введите номер фирмы");
+        int idTypeSimulator = readInteger(1, 10, "Введите номер типа тренажёра");
+        if (!StringUtils.isEmpty(nameModelSimulator)) {
+            controller.validUpdateSimulator(idSimulator, nameModelSimulator, idFirm, idTypeSimulator);
         }
     }
 
     private void deleteSimulatorMenu() {
         System.out.println("-- Удаление тренажёра --");
-        int i = readInteger(0, 10, "Введите номер тренажёра, которую хотите удалить");
-        controller.validDeleteSimulator(i);
+        int idSimulator = readInteger(1, 10, "Введите номер тренажёра, которую хотите удалить");
+        controller.validDeleteSimulator(idSimulator);
     }
 
     private void createExerciseMenu() {
         System.out.println("-- Добавление упражнения --");
-        String s,s1;
-        int i,j,k;
-        s = readString(0, 20, "Введите тип упражнения");
-        s1 = readString(0, 20, "Введите время выполнения упражнения (мм:сс)");
-        i = readInteger(0, 10, "Введите номер тренировки");
-        j = readInteger(0, 10, "Введите номер тренажёра");
-        k = readInteger(0, 9, "Введите количество подходов");
-        if (s != "" && s1!= "" && i != 0 && j!=0 && k!= 0) {
-            controller.validCreateExercise(s, i, j, s1, k);
-        }
+        String time = readString(4, 8, "Введите время выполнения упражнения чч:мм");
+        int idTypeExercise = readInteger(1, 10, "Введите номер типа упражнения");
+        int idTraining = readInteger(1, 10, "Введите номер тренировки");
+        int idSimulator = readInteger(1, 10, "Введите номер тренажёра");
+        int countApproach = readInteger(1, 9, "Введите количество подходов");
+        if (time.matches("\\d{2}:\\d{2}") && !StringUtils.isEmpty(time)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime date = LocalTime.parse(time, formatter);
+            controller.validCreateExercise(idTypeExercise, idTraining, idSimulator, date, countApproach);
+        } else System.out.println("При введении времени произошла ошибка");
     }
 
     private void updateExerciseMenu() {
         System.out.println("-- Изменение упражнения --");
-        String s,s1;
-        int i,j,k,n;
-        s = readString(0, 20, "Введите новый тип упражнения");
-        s1 = readString(0, 20, "Введите новое время выполнения упражнения (мм:сс)");
-        n = readInteger(0, 10, "Введите номер упражнения, которое хотите изменить");
-        i = readInteger(0, 10, "Введите новый номер тренировки");
-        j = readInteger(0, 10, "Введите новый номер тренажёра");
-        k = readInteger(0, 9, "Введите новое количество подходов");
-        if (s != "" && s1!= "" && i != 0 && j!=0 && k!= 0) {
-            controller.validUpdateExercise(n, s, i, j, s1, k);
-        }
+        String time = readString(4, 5, "Введите время выполнения упражнения чч:мм");
+        int idExercise = readInteger(1, 10, "Введите номер упражнения, которое хотите изменить");
+        int idTypeExercise = readInteger(1, 10, "Введите номер типа упражнения");
+        int idTraining = readInteger(1, 10, "Введите номер тренировки");
+        int idSimulator = readInteger(1, 10, "Введите номер тренажёра");
+        int countApproach = readInteger(1, 9, "Введите количество подходов");
+        if (time.matches("\\d{2}:\\d{2}") && !StringUtils.isEmpty(time)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime date = LocalTime.parse(time, formatter);
+            controller.validUpdateExercise(idExercise, idTypeExercise, idTraining, idSimulator, date, countApproach);
+        } else System.out.println("При введении времени произошла ошибка");
+
     }
 
     private void deleteExerciseMenu() {
         System.out.println("-- Удаление упражнения --");
-        int i = readInteger(0, 10, "Введите номер упражнения, которую хотите удалить");
-        controller.validDeleteExercise(i);
+        int idExercise = readInteger(1, 10, "Введите номер упражнения, которую хотите удалить");
+        controller.validDeleteExercise(idExercise);
     }
 
     public void runView() {

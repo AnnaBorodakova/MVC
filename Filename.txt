@@ -1,0 +1,10 @@
+[
+  {
+    "typeExersise": "dfgji",
+    "idTypeExercise": 10
+  }, 
+  {
+    "typeExersise": "FFFFFFFFF",
+    "idTypeExercise": 2
+  }
+]
