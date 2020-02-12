@@ -1,59 +1,55 @@
 package model.services;
 
+import interfaces.IServices;
 import model.Firm;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class SFirm {
-    private List<Firm> firms = new ArrayList<>();
+public class SFirm<T extends Firm> implements IServices<T> {
+    private List<T> firms = new ArrayList<>();
 
-   /* public SFirm() {
-        this.firms = new ArrayList<>();
-    }
-*/
-    public List<Firm> getFirms() {
+    public List<T> get() {
         return firms;
     }
 
-    public void setFirms(List<Firm> firms) {
+    public void set(List<T> firms) {
         this.firms = firms;
     }
 
-    public boolean createFirm(String nameFirm){
-        Firm firm = findFirm(nameFirm);
-        if(firm == null){
-            firm = new Firm(nameFirm);
-            firms.add(firm);
+    public boolean create(T object) {
+        Optional<T> firm = firms.stream().filter(x -> x.getNameFirm().equals(object.getNameFirm())).findFirst();
+        if (firm.isPresent()) {
+            return false;
+        }else {
+        return firms.add(object);
         }
-        return true;
     }
 
-    public boolean deleteFirm(String nameFirm)
-    {
-        Firm firm = findFirm(nameFirm);
-        if(firm != null){
-            firms.remove(firm);
+    public boolean delete(T object) {
+        if (find(object.getIdFirm()) == null) {
+            return false;
+        }else {
+            firms.remove(object);
+            return true;
         }
-        return true;
     }
 
-    public boolean updateFirm(String name, String name1){
-        Firm firm = findFirm(name);
-        Firm firm2 = findFirm(name1);
-        if(firm != null && firm2 == null){
-            firm.setNameFirm(name1);
+    public boolean update(T fobject, T sobject) {
+        if (fobject == null && sobject == null) {
+            return false;
+        } else {
+            fobject.setNameFirm(sobject.getNameFirm());
+            return true;
         }
-        return true;
     }
-    public Firm findFirm(String name) {
-        Firm firm = null;
-        for (Firm firm1 : firms) {
-            if (firm1.getNameFirm().equals(name)) {
-                firm = firm1;
-                break;
-            }
+
+    public T find(int id) {
+        Optional<T> firm = firms.stream().filter(x -> x.getIdFirm() == id).findFirst();
+        if(firm.isPresent()){
+            return firm.get();
         }
-        return firm;
+        else  return null;
     }
 }

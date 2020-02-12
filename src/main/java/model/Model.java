@@ -1,172 +1,199 @@
 package model;
 
 import interfaces.IModel;
-import model.services.*;
+import interfaces.IServices;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 public class Model implements IModel {
-    private SFirm sFirm;
-    private STypeExercise sTypeExercise;
-    private STypeSimulator sTypeSimulator;
-    private STraining sTraining;
-    private SSimulator sSimulator;
-    private ExerciseS exerciseS;
+    private IServices<TypeExercise> typeExerciseIServices;
+    private IServices<TypeSimulator> typeSimulatorIServices;
+    private IServices<Training> trainingIServices;
+    private IServices<Simulator> simulatorIServices;
+    private IServices<Exercise> exerciseIServices;
+    private IServices<Firm> firmIService;
 
-    public void setServices(SFirm sFirm, STypeExercise sTypeExercise, STypeSimulator sTypeSimulator, STraining sTraining, SSimulator sSimulator, ExerciseS exerciseS){
-        this.sFirm = sFirm;
-        this.sTypeExercise = sTypeExercise;
-        this.sTypeSimulator = sTypeSimulator;
-        this.sTraining = sTraining;
-        this.sSimulator = sSimulator;
-        this.exerciseS = exerciseS;
+    public void setServices(IServices<Firm> firmIService, IServices<TypeExercise> typeExerciseIServices, IServices<TypeSimulator> typeSimulatorIServices, IServices<Training> sTraining, IServices<Simulator> sSimulator, IServices<Exercise> exerciseS){
+        this.firmIService = firmIService;
+        this.typeExerciseIServices = typeExerciseIServices;
+        this.typeSimulatorIServices = typeSimulatorIServices;
+        this.trainingIServices = sTraining;
+        this.simulatorIServices = sSimulator;
+        this.exerciseIServices = exerciseS;
     }
     //Методы работы с упражнениями
     public List<Exercise> getExercises() {
-        return exerciseS.getExercises();
+        return exerciseIServices.get();
     }
 
     public void setExercises(List<Exercise> exercises) {
-        exerciseS.setExercises(exercises);
+        exerciseIServices.set(exercises);
     }
 
-    public boolean createExercise(int idExercise, TypeExercise typeExercise, Training training, Simulator simulator, String time, int countApproach) {
-        return exerciseS.createExercise(idExercise,typeExercise,training,simulator,time,countApproach);
+    public boolean createExercise(int idExercise, TypeExercise typeExercise, Training training, Simulator simulator, LocalTime time, int countApproach) {
+        Exercise exercise = new Exercise(idExercise, typeExercise, training, simulator, time, countApproach);
+        return exerciseIServices.create(exercise);
     }
 
     public Exercise findExercise(int idExercise) {
-        return exerciseS.findExercise(idExercise);
+        return exerciseIServices.find(idExercise);
     }
 
     public boolean deleteExercise(int idExercise){
-        return exerciseS.deleteExetcise(idExercise);
+        Exercise exercise = findExercise(idExercise);
+        return exerciseIServices.delete(exercise);
     }
 
-    public boolean updateExercise(int idExercise, TypeExercise typeExercise, Training training, Simulator simulator, String time, int countApproach){
-        return exerciseS.updateExercise(idExercise,typeExercise,training,simulator,time,countApproach);
+    public boolean updateExercise(int idExercise, TypeExercise typeExercise, Training training, Simulator simulator, LocalTime time, int countApproach){
+        Exercise exercise = findExercise(idExercise);
+        Exercise exercise1 = new Exercise(idExercise,typeExercise, training,simulator,time,countApproach);
+        return exerciseIServices.update(exercise,exercise1);
     }
     //Методы работы с тренажёрами
     public void setSimulators(List<Simulator> simulators) {
-        sSimulator.setSimulators(simulators);
+        simulatorIServices.set(simulators);
     }
 
     public List<Simulator> getSimulators() {
-        return sSimulator.getSimulators();
+        return simulatorIServices.get();
     }
 
     public boolean createSimulator(int idSimulator, String model, Firm firm, TypeSimulator typeSimulator) {
-        return sSimulator.createSimulator(idSimulator, model, firm, typeSimulator);
+        Simulator simulator = new Simulator(idSimulator, model, firm, typeSimulator);
+        return simulatorIServices.create(simulator);
     }
 
     public boolean deleteSimulator(int idSimulator) {
-        return sSimulator.deleteSimulator(idSimulator);
+        Simulator simulator = findSimulator(idSimulator);
+        return simulatorIServices.delete(simulator);
     }
 
     public Simulator findSimulator(int idSimulator) {
-        return sSimulator.findSimulator(idSimulator);
+        return simulatorIServices.find(idSimulator);
     }
 
     public boolean updateSimulator(int idSimulator, String model, Firm firm, TypeSimulator typeSimulator){
-        return sSimulator.updateSimulator(idSimulator,model,firm,typeSimulator);
+        Simulator simulator = findSimulator(idSimulator);
+        Simulator simulator1 = new Simulator(idSimulator, model, firm, typeSimulator);
+        return simulatorIServices.update(simulator, simulator1);
     }
 
 
     //Методы работы с тренировками
     public void setTrainings(List<Training> trainings) {
-        sTraining.setTrainings(trainings);
+        trainingIServices.set(trainings);
     }
 
     public List<Training> getTrainings() {
-        return sTraining.getTrainings();
+        return trainingIServices.get();
     }
 
-    public boolean createTraining(int idTraining, String time, String date) {
-        return sTraining.createTraining(idTraining, time, date);
+    public boolean createTraining(int idTraining, LocalTime time, LocalDate date) {
+        Training training = new Training(idTraining,time,date);
+        return trainingIServices.create(training);
     }
 
     public boolean deleteTraining(int idTraining) {
-        return sTraining.deleteTraining(idTraining);
+        Training training = findTraining(idTraining);
+        return trainingIServices.delete(training);
     }
 
     public Training findTraining(int idTraining){
-        return sTraining.findTraining(idTraining);
+        return trainingIServices.find(idTraining);
     }
 
-    public boolean updateTraining(int idTraining, String time, String date){
-        return sTraining.updateTraining(idTraining,time,date);
+    public boolean updateTraining(int idTraining, LocalTime time, LocalDate date){
+        Training training = findTraining(idTraining);
+        Training training1 = new Training(idTraining, time, date);
+        return trainingIServices.update(training,training1);
     }
     //Методы работы с фирмами
     public List<Firm> getFirms() {
-        return sFirm.getFirms();
+        return firmIService.get();
     }
 
     public void setFirms(List<Firm> firms) {
-        sFirm.setFirms(firms);
+        firmIService.set(firms);
     }
 
-    public boolean createFirm(String nameFirm) {
-        return sFirm.createFirm(nameFirm);
+    public boolean createFirm(int id, String nameFirm) {
+        Firm firm = new Firm(id, nameFirm);
+        return firmIService.create(firm);
     }
 
-    public boolean deleteFirm(String nameFirm) {
-        return sFirm.deleteFirm(nameFirm);
+    public boolean deleteFirm(int id) {
+        Firm firm = findFirm(id);
+        return firmIService.delete(firm);
     }
 
-    public Firm findFirm(String name) {
-        return sFirm.findFirm(name);
+    public Firm findFirm(int id) {
+        return firmIService.find(id);
     }
 
-    public boolean updateFirm(String name, String name1){
-        return sFirm.updateFirm(name,name1);
+    public boolean updateFirm(int id1, String nameFirm){
+        Firm firstFirm = findFirm(id1);
+        Firm secondFirm = new Firm(nameFirm);
+        return firmIService.update(firstFirm, secondFirm);
     }
 
     //Методы работы с типами упражнений
     public List<TypeExercise> getTypeExercises() {
-        return sTypeExercise.getTypeExercises();
+        return typeExerciseIServices.get();
     }
 
     public void setTypeExercises(List<TypeExercise> typeExercises) {
-        sTypeExercise.setTypeExercises(typeExercises);
+        typeExerciseIServices.set(typeExercises);
     }
 
-    public boolean createTypeExercise(String nameTE) {
-        return sTypeExercise.createTypeExercise(nameTE);
+    public boolean createTypeExercise(int id, String nameTE) {
+        TypeExercise te = new TypeExercise(id, nameTE);
+        return typeExerciseIServices.create(te);
     }
 
-    public boolean deleteTypeExercise(String nameTE) {
-        return sTypeExercise.deleteTypeExercise(nameTE);
+    public boolean deleteTypeExercise(int id) {
+        TypeExercise te = findTypeExercise(id);
+        return typeExerciseIServices.delete(te);
     }
 
-    public TypeExercise findTypeExercise(String nameTE) {
-        return sTypeExercise.findTypeExercise(nameTE);
+    public TypeExercise findTypeExercise(int id) {
+        return typeExerciseIServices.find(id);
     }
 
-    public boolean updateTypeExercise(String name, String name1){
-        return sTypeExercise.updateTypeExercise(name,name1);
+    public boolean updateTypeExercise(int id, String nameTE){
+        TypeExercise te = findTypeExercise(id);
+        TypeExercise te1 = new TypeExercise(nameTE);
+        return typeExerciseIServices.update(te,te1);
     }
 
     //Методы работы с типами тренажёров
     public List<TypeSimulator> getTypeSimulator() {
-        return sTypeSimulator.getTypeSimulators();
+        return typeSimulatorIServices.get();
     }
 
     public void setTypeSimulators(List<TypeSimulator> typeSimulator) {
-        sTypeSimulator.setTypeSimulators(typeSimulator);
+        typeSimulatorIServices.set(typeSimulator);
     }
 
-    public boolean createTypeSimulator(String nameTS) {
-        return sTypeSimulator.createTypeSimulator(nameTS);
+    public boolean createTypeSimulator(int id, String nameTS) {
+        TypeSimulator typeSimulator = new TypeSimulator(id, nameTS);
+        return typeSimulatorIServices.create(typeSimulator);
     }
 
-    public boolean deleteTypeSimulator(String nameTS) {
-        return sTypeSimulator.deleteTypeSimulator(nameTS);
+    public boolean deleteTypeSimulator(int id) {
+        TypeSimulator ts = findTypeSimulator(id);
+        return typeSimulatorIServices.delete(ts);
     }
 
-    public TypeSimulator findTypeSimulator(String TypeSimulator) {
-        return sTypeSimulator.findTypeSimulator(TypeSimulator);
+    public TypeSimulator findTypeSimulator(int id) {
+        return typeSimulatorIServices.find(id);
     }
 
-    public boolean updateTypeSimulator(String name, String name1){
-        return sTypeSimulator.updateTypeSimulator(name,name1);
+    public boolean updateTypeSimulator(int id, String name1){
+        TypeSimulator ts = findTypeSimulator(id);
+        TypeSimulator ts1 = new TypeSimulator(name1);
+        return typeSimulatorIServices.update(ts,ts1);
     }
 }

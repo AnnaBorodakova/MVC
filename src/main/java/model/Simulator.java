@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 
 public class Simulator implements Serializable {
@@ -46,5 +47,20 @@ public class Simulator implements Serializable {
 
     public void setTypeSimulator(TypeSimulator typeSimulator) {
         this.typeSimulator = typeSimulator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Simulator)) return false;
+        Simulator simulator = (Simulator) o;
+        return getModel().equals(simulator.getModel()) &&
+                getFirm().equals(simulator.getFirm()) &&
+                getTypeSimulator().equals(simulator.getTypeSimulator());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getModel(), getFirm(), getTypeSimulator());
     }
 }

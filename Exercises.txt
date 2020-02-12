@@ -1,0 +1,42 @@
+[
+  {
+    "idExercise": 1,
+    "typeExercise": {
+      "typeExersise": "Кардио",
+      "idTypeExercise": 2
+    },
+    "training": {
+      "idTraining": 2,
+      "timeBegining": {
+        "hour": 13,
+        "minute": 40,
+        "second": 0,
+        "nano": 0
+      },
+      "date": {
+        "year": 2020,
+        "month": 2,
+        "day": 15
+      }
+    },
+    "simulator": {
+      "model": "Model2",
+      "firm": {
+        "nameFirm": "Firm2",
+        "idFirm": 2
+      },
+      "typeSimulator": {
+        "typeSimulator": "Силовой",
+        "idTypeSimulator": 2
+      },
+      "idSimulator": 2
+    },
+    "time": {
+      "hour": 3,
+      "minute": 0,
+      "second": 0,
+      "nano": 0
+    },
+    "countApproach": 3
+  }
+]

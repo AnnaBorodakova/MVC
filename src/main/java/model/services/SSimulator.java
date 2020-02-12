@@ -1,62 +1,62 @@
 package model.services;
 
+import interfaces.IServices;
 import model.Firm;
 import model.Simulator;
 import model.TypeSimulator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class SSimulator {
-    private List<Simulator> simulators;
+public class SSimulator<T extends Simulator> implements IServices<T> {
+    private List<T> simulators;
 
     public SSimulator() {
         simulators = new ArrayList<>();
     }
 
-    public List<Simulator> getSimulators() {
+    public List<T> get() {
         return simulators;
     }
 
-    public void setSimulators(List<Simulator> simulators) {
+    public void set(List<T> simulators) {
         this.simulators = simulators;
     }
 
-    public boolean createSimulator(int idSimulator, String model, Firm firm, TypeSimulator typeSimulator){
-        Simulator simulator = findSimulator(idSimulator);
-        if(simulator == null){
-            simulator = new Simulator(idSimulator, model, firm, typeSimulator);
-            simulators.add(simulator);
+    public boolean create(T object){
+        Optional<T> simulator = simulators.stream().filter(x -> x.equals(object)).findAny();
+        if (simulator.isPresent()) {
+            return false;
+        }else {
+            return simulators.add(object);
         }
-        return true;
     }
 
-    public boolean deleteSimulator(int idSimulator){
-        Simulator simulator = findSimulator(idSimulator);
-        if(simulator != null){
-            simulators.remove(simulator);
-        }
-        return true;
+    public boolean delete(T object) {
+        if (find(object.getIdSimulator()) == null) {
+           return false;
+        }else { simulators.remove(object);
+        return true;}
     }
 
-    public boolean updateSimulator(int idSimulator, String model, Firm firm, TypeSimulator typeSimulator){
-        Simulator simulator = findSimulator(idSimulator);
-        if(simulator != null){
-            simulator.setModel(model);
-            simulator.setFirm(firm);
-            simulator.setTypeSimulator(typeSimulator);
+    public boolean update(T fobject, T sobject) {
+        if (fobject == null && sobject == null) {
+            return false;
+        } else {
+            fobject.setTypeSimulator(sobject.getTypeSimulator());
+            fobject.setFirm(sobject.getFirm());
+            fobject.setModel(sobject.getModel());
+            return true;
         }
-        return true;
     }
 
-    public Simulator findSimulator(int idSimulator)
+    public T find(int idSimulator)
     {
-        Simulator simulator = null;
-        for (Simulator simulator1 : simulators){
-            if(simulator1.getIdSimulator() == idSimulator){
-                simulator =simulator1;
-            }
+        Optional<T> simulator = simulators.stream().filter(x -> x.getIdSimulator() == idSimulator).findFirst();
+        if(simulator.isPresent()){
+            return simulator.get();
         }
-        return simulator;
+        else  return null;
     }
 }

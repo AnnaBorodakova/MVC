@@ -1,0 +1,10 @@
+[
+  {
+    "typeSimulator": "Кардио",
+    "idTypeSimulator": 1
+  },
+  {
+    "typeSimulator": "Силовой",
+    "idTypeSimulator": 2
+  }
+]

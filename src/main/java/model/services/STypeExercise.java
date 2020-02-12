@@ -1,59 +1,57 @@
 package model.services;
 
+import interfaces.IServices;
 import model.TypeExercise;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-public class STypeExercise {
-    private List<TypeExercise> typeExercises;
+public class STypeExercise<T extends TypeExercise> implements IServices<T>{
+    private List<T> typeExercises;
 
     public STypeExercise() {
         typeExercises = new ArrayList<>();
     }
 
-    public List<TypeExercise> getTypeExercises() {
+    public List<T> get() {
         return typeExercises;
     }
 
-    public void setTypeExercises(List<TypeExercise> typeExercises) {
+    public void set(List<T> typeExercises) {
         this.typeExercises = typeExercises;
     }
 
-    public boolean createTypeExercise(String typeExercise){
-        TypeExercise tExercise = findTypeExercise(typeExercise);
-        if(tExercise == null){
-            tExercise = new TypeExercise(typeExercise);
-            typeExercises.add(tExercise);
+    public boolean create(T object){
+        Optional<T> te = typeExercises.stream().filter(x -> x.getTypeExersise().equals(object.getTypeExersise())).findAny();
+        if (te.isPresent()) {
+            return false;
+        }else {
+            return typeExercises.add(object);
         }
-        return true;
     }
 
-    public boolean deleteTypeExercise(String nameTypeExercise){
-        TypeExercise typeExercise = findTypeExercise(nameTypeExercise);
-        if(typeExercise != null){
-            typeExercises.remove(typeExercise);
-        }
-        return true;
+    public boolean delete(T object) {
+        if (find(object.getIdTypeExercise()) == null) {
+            return false;
+        }else {typeExercises.remove(object);
+        return true;}
     }
 
-    public boolean updateTypeExercise(String name, String name1){
-        TypeExercise te1 = findTypeExercise(name);
-        TypeExercise te2 = findTypeExercise(name1);
-        if(te1 != null && te2 == null){
-            te1.setTypeExersise(name1);
+    public boolean update(T fobject, T sobject) {
+        if (fobject == null && sobject == null) {
+            return false;
+        } else {
+            fobject.setTypeExersise(sobject.getTypeExersise());
+            return true;
         }
-        return true;
     }
-    public TypeExercise findTypeExercise(String typeExersise)
-    {
-        TypeExercise typeExercise1 = null;
-        for(TypeExercise typeExercise2 : typeExercises){
-            if(typeExercise2.getTypeExersise().equals(typeExersise)){
-                typeExercise1 = typeExercise2;
-                break;
-            }
+
+    public T find(int id) {
+        Optional<T> te = typeExercises.stream().filter(x -> x.getIdTypeExercise() == id).findFirst();
+        if(te.isPresent()){
+            return  te.get();
         }
-        return typeExercise1;
+        else  return null;
     }
 }
